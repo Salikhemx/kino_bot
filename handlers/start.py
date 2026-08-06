@@ -22,7 +22,7 @@ async def start(message: Message):
             [
                 InlineKeyboardButton(
                     text="👨‍💻 Admin",
-                    url="https://t.me/Kino_Go2026_bot"
+                    url="https://t.me/kinolaradmin1"
                 )
             ]
         ]
