@@ -3,6 +3,7 @@ import sqlite3
 conn = sqlite3.connect("database.db")
 cursor = conn.cursor()
 
+# Kinolar
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS movies(
     code TEXT PRIMARY KEY,
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS movies(
 )
 """)
 
+# Sozlamalar
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS settings(
     id INTEGER PRIMARY KEY,
@@ -17,8 +19,19 @@ CREATE TABLE IF NOT EXISTS settings(
 )
 """)
 
+# Foydalanuvchilar
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users(
+    user_id INTEGER PRIMARY KEY
+)
+""")
+
 conn.commit()
 
+
+# =========================
+# KINOLAR
+# =========================
 
 def add_movie(code, file_id):
     cursor.execute(
@@ -41,6 +54,17 @@ def get_movie(code):
     return None
 
 
+def get_movies_count():
+    cursor.execute(
+        "SELECT COUNT(*) FROM movies"
+    )
+    return cursor.fetchone()[0]
+
+
+# =========================
+# KANAL
+# =========================
+
 def set_channel(channel):
     cursor.execute(
         "INSERT OR REPLACE INTO settings(id, channel) VALUES(1, ?)",
@@ -50,10 +74,32 @@ def set_channel(channel):
 
 
 def get_channel():
-    cursor.execute("SELECT channel FROM settings WHERE id=1")
+    cursor.execute(
+        "SELECT channel FROM settings WHERE id=1"
+    )
+
     result = cursor.fetchone()
 
     if result:
         return result[0]
 
     return None
+
+
+# =========================
+# FOYDALANUVCHILAR
+# =========================
+
+def add_user(user_id):
+    cursor.execute(
+        "INSERT OR IGNORE INTO users(user_id) VALUES(?)",
+        (user_id,)
+    )
+    conn.commit()
+
+
+def get_users_count():
+    cursor.execute(
+        "SELECT COUNT(*) FROM users"
+    )
+    return cursor.fetchone()[0]

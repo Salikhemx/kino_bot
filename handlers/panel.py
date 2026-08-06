@@ -9,7 +9,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 
 from config import ADMIN_ID
-from database import set_channel, get_channel
+from database import (
+    set_channel,
+    get_channel,
+    get_users_count,
+    get_movies_count
+)
 
 router = Router()
 
@@ -51,9 +56,7 @@ async def add_channel(message: Message, state: FSMContext):
         return
 
     await message.answer(
-        "📢 Kanal username yuboring.\n\n"
-        "Misol:\n"
-        "@kinolar12026"
+        "📢 Kanal username yuboring.\n\nMisol:\n@kinolar12026"
     )
 
     await state.set_state(ChannelState.waiting_channel)
@@ -98,8 +101,18 @@ async def statistic(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
 
+    users = get_users_count()
+    movies = get_movies_count()
+
     await message.answer(
-        "📊 Statistika bo'limi hali tayyor emas."
+        f"""
+📊 <b>BOT STATISTIKASI</b>
+
+👥 Foydalanuvchilar: <b>{users}</b>
+
+🎬 Kinolar: <b>{movies}</b>
+""",
+        parse_mode="HTML"
     )
 
 

@@ -7,7 +7,11 @@ from aiogram.types import (
 )
 from aiogram.enums import ChatMemberStatus
 
-from database import get_movie, get_channel
+from database import (
+    get_movie,
+    get_channel,
+    add_user
+)
 
 router = Router()
 
@@ -27,7 +31,7 @@ async def check_sub(bot, user_id):
             ChatMemberStatus.CREATOR,
         )
 
-    except:
+    except Exception:
         return False
 
 
@@ -36,6 +40,9 @@ async def movie_handler(message: Message):
 
     if message.text.startswith("/"):
         return
+
+    # Foydalanuvchini bazaga saqlash
+    add_user(message.from_user.id)
 
     channel = get_channel()
 
@@ -53,7 +60,7 @@ async def movie_handler(message: Message):
                     [
                         InlineKeyboardButton(
                             text="📢 Kanalga obuna bo'lish",
-                            url=f"https://t.me/{channel.replace('@','')}"
+                            url=f"https://t.me/{channel.replace('@', '')}"
                         )
                     ],
                     [
@@ -66,7 +73,7 @@ async def movie_handler(message: Message):
             )
 
             await message.answer(
-                "❌ Avval kanalga obuna bo'ling.",
+                "❌ Avval kanalga obuna bo'ling!",
                 reply_markup=keyboard
             )
 
@@ -93,7 +100,7 @@ async def check_button(callback: CallbackQuery):
     if ok:
 
         await callback.message.edit_text(
-            "✅ Obuna tasdiqlandi!\n\nEndi kino kodini yuboring."
+            "✅ Obuna tasdiqlandi!\n\n🎬 Endi kino kodini yuboring."
         )
 
     else:
