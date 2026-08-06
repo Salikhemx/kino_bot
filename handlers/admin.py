@@ -29,8 +29,7 @@ class Broadcast(StatesGroup):
 @router.message(Command("add"))
 async def add_cmd(message: Message, state: FSMContext):
 
-    if message.from_user.id !=  8993879816
-:
+    if message.from_user.id != ADMIN_ID:
         await message.answer("❌ Siz admin emassiz!")
         return
 
